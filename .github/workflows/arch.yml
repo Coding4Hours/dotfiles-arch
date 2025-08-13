@@ -12,22 +12,12 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y arch-install-scripts git squashfs-tools xorriso
-
-      - name: Setup archiso
-        run: |
-          git clone https://gitlab.archlinux.org/archlinux/archiso.git archiso-src
-          cd archiso-src
-          git checkout releng
-
-      - name: Copy custom ArchISO files
-        run: |
-          cp -r ./archiso/* ./archiso-src/configs/releng/
 
       - name: Build ArchISO
         working-directory: archiso-src/configs/releng
