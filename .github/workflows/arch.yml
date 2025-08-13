@@ -25,7 +25,7 @@ jobs:
           sudo mkarchiso -v -w /tmp/archiso-work -o $GITHUB_WORKSPACE/out .
 
       - name: Upload ISO artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: archlinux-custom-iso
           path: out/*.iso
