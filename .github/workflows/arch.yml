@@ -13,15 +13,33 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Install dependencies
+      - name: Build Docker image for Arch ISO build
         run: |
-          sudo apt-get update
-          sudo apt-get install -y arch-install-scripts git squashfs-tools xorriso
+          cat <<EOF > Dockerfile
+          FROM archlinux:latest
 
+          RUN pacman -Syu --noconfirm && \
+              pacman -S --noconfirm arch-install-scripts git squashfs-tools xorriso base-devel fakeroot sudo && \
+              pacman -Scc --noconfirm
 
-      - name: Build the ISO
+          RUN useradd -m builder && echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+          USER builder
+          WORKDIR /home/builder
+
+          CMD ["/bin/bash"]
+          EOF
+
+          docker build -t archiso-builder .
+
+      - name: Build the ISO inside Docker
         run: |
-          sudo mkarchiso -v -w /tmp/archiso-work -o $GITHUB_WORKSPACE/out .
+          mkdir -p out
+          docker run --rm \
+            -v ${{ github.workspace }}:/home/builder/workspace \
+            -w /home/builder/workspace \
+            archiso-builder \
+            bash -c "mkarchiso -v -w /tmp/archiso-work -o out ."
 
       - name: Upload ISO artifact
         uses: actions/upload-artifact@v4
