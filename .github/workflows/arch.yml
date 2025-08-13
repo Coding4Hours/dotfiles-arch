@@ -19,7 +19,7 @@ jobs:
           FROM archlinux:latest
 
           RUN pacman -Syu --noconfirm && \
-              pacman -S --noconfirm arch-install-scripts git squashfs-tools xorriso base-devel fakeroot sudo && \
+              pacman -S --noconfirm arch-install-scripts git squashfs-tools archiso base-devel fakeroot sudo && \
               pacman -Scc --noconfirm
 
           RUN useradd -m builder && echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
