@@ -35,7 +35,7 @@ jobs:
       - name: Build the ISO inside Docker
         run: |
           mkdir -p out
-          docker run --rm \
+          docker run --rm --privileged  \
             -v ${{ github.workspace }}:/home/builder/workspace \
             -w /home/builder/workspace \
             archiso-builder \
