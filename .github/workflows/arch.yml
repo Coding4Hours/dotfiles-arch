@@ -1,9 +1,8 @@
-name: Build Arch ISO
+name: Build Arch Linux ISO
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -11,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v4
 
       - name: Install dependencies
@@ -19,10 +18,15 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y arch-install-scripts git squashfs-tools xorriso
 
-      - name: Build ArchISO
-        working-directory: archiso-src/configs/releng
+      - name: Download archiso build.sh
         run: |
-          sudo mkarchiso -v -w /tmp/archiso-work -o $GITHUB_WORKSPACE/out .
+          mkdir -p archiso/scripts
+          curl -Lo archiso/scripts/build.sh https://raw.githubusercontent.com/archlinux/archiso/master/scripts/build.sh
+          chmod +x archiso/scripts/build.sh
+
+      - name: Build the ISO
+        run: |
+          sudo ./archiso/scripts/build.sh -v -w /tmp/archiso-work -o $GITHUB_WORKSPACE/out .
 
       - name: Upload ISO artifact
         uses: actions/upload-artifact@v4
