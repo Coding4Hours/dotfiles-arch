@@ -18,15 +18,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y arch-install-scripts git squashfs-tools xorriso
 
-      - name: Download archiso build.sh
-        run: |
-          mkdir -p archiso/scripts
-          curl -Lo archiso/scripts/build.sh https://raw.githubusercontent.com/archlinux/archiso/master/scripts/build.sh
-          chmod +x archiso/scripts/build.sh
 
       - name: Build the ISO
         run: |
-          sudo ./archiso/scripts/build.sh -v -w /tmp/archiso-work -o $GITHUB_WORKSPACE/out .
+          sudo mkarchiso -v -w /tmp/archiso-work -o $GITHUB_WORKSPACE/out .
 
       - name: Upload ISO artifact
         uses: actions/upload-artifact@v4
