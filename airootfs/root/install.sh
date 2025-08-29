@@ -4,8 +4,9 @@
 echo "This script will launch the installer and then configure your new system"
 echo "to automatically install your dotfiles on the first boot."
 echo
-read -p "Enter the username you will create during installation: " USERNAME
-read -p "Enter the FULL URL of your dotfiles git repository: " DOTFILES_REPO_URL
+
+USERNAME = "coding4hours"
+DOTFILES_REPO_URL = "https://github.com/Coding4Hours/dotfiles/"
 
 if [ -z "$USERNAME" ] || [ -z "$DOTFILES_REPO_URL" ]; then
     echo "ERROR: Username and repository URL cannot be empty. Exiting."
