@@ -22,7 +22,7 @@ echo "Press Enter to launch the installer..."
 read
 
 # --- LAUNCH INSTALLER AND WAIT ---
-calamares &
+archinstall
 wait $!
 echo
 echo "Installer finished. Now setting up your dotfiles for the first boot..."
