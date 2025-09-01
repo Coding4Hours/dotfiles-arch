@@ -266,7 +266,7 @@ cat <<-_EOF_ >user_configuration.json
     "archinstall-language": "English",
     "auth_config": {},
     "audio_config": { "audio": "pipewire" },
-    "bootloader": "Limine",
+    "bootloader": "systemd-boot",
     "custom_commands": [],
     "disk_config": {
         "btrfs_options": { 
@@ -329,7 +329,7 @@ cat <<-_EOF_ >user_configuration.json
                 ],
                 "wipe": true
             }
-        ],
+        ]
     },
     "hostname": "$hostname",
     "kernels": [ "linux" ],
