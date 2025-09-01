@@ -128,3 +128,7 @@ xl2tpd
 zsh
 gum
 wget
+
+chaotic-keyring
+chaotic-mirrorlist
+yay
