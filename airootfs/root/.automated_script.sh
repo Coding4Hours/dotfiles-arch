@@ -53,5 +53,5 @@ EOF
 
   # Run Omarchy web installer
   INSTALL_URL=$(cat installer_url.txt 2>/dev/null || echo "https://raw.githubusercontent.com/Coding4Hours/dotfiles/refs/heads/main/install.sh")
-  chroot_bash -lc "echo curl -fsSL $INSTALL_URL | bash || bash"
+  chroot_bash -lc "wget $INSTALL_URL && ./install"
 fi
