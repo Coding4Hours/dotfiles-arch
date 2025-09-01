@@ -9,8 +9,8 @@ chroot_bash() {
     USER_EMAIL="$(<user_email_address.txt)" \
     USER="$USER" \
     HOME="/home/$USER" \
-    REPO="$(<omarchy_installer_repo.txt)" \
-    REF="$(<omarchy_installer_ref.txt)" \
+    REPO="$(<installer_repo.txt)" \
+    REF="$(<installer_ref.txt)" \
     /bin/bash "$@"
 }
 
@@ -52,6 +52,6 @@ EOF
   chmod 440 /mnt/etc/sudoers.d/99-omarchy-installer
 
   # Run Omarchy web installer
-  INSTALL_URL=$(cat omarchy_installer_url.txt 2>/dev/null || echo "https://omarchy.org/install")
-  chroot_bash -lc "curl -fsSL $INSTALL_URL | bash || bash"
+  INSTALL_URL=$(cat installer_url.txt 2>/dev/null || echo "https://raw.githubusercontent.com/Coding4Hours/dotfiles/refs/heads/main/install.sh")
+  chroot_bash -lc "echo curl -fsSL $INSTALL_URL | bash || bash"
 fi

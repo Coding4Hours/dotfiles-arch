@@ -105,7 +105,7 @@ user_form() {
   step "Let's setup your user account..."
 
   while true; do
-    username=$(gum input --placeholder "Alphanumeric without spaces (like dhh)" --prompt.foreground="#845DF9" --prompt "Username> ") || abort
+    username=$(gum input --placeholder "Alphanumeric without spaces (like iusearchbtw)" --prompt.foreground="#845DF9" --prompt "Username> ") || abort
 
     if [[ "$username" =~ ^[a-z_][a-z0-9_-]*[$]?$ ]]; then
       break
@@ -132,12 +132,12 @@ user_form() {
   email_address=$(gum input --placeholder "Used for git authentication (hit return to skip)" --prompt.foreground="#845DF9" --prompt "Email address> ")
 
   while true; do
-    hostname=$(gum input --placeholder "Alphanumeric without spaces (or return for 'omarchy')" --prompt.foreground="#845DF9" --prompt "Hostname> ")
+    hostname=$(gum input --placeholder "Alphanumeric without spaces (or return for 'iusearchbtw')" --prompt.foreground="#845DF9" --prompt "Hostname> ")
 
     if [[ "$hostname" =~ ^[A-Za-z_][A-Za-z0-9_-]*\$?$ ]]; then
       break
     elif [[ -z $hostname ]]; then
-      hostname="omarchy"
+      hostname="iusearchbtw"
       break
     else
       notice "Hostname must be alphanumeric using dashes or underscores but no spaces" 1
@@ -330,9 +330,6 @@ cat <<-_EOF_ >user_configuration.json
                 "wipe": true
             }
         ],
-        "disk_encryption": {
-            "encryption_type": "",
-        }
     },
     "hostname": "$hostname",
     "kernels": [ "linux" ],
@@ -351,7 +348,6 @@ cat <<-_EOF_ >user_configuration.json
     "mirror_config": {
         "custom_repositories": [],
         "custom_servers": [
-            {"url": "https://mirror.omarchy.org/\$repo/os/\$arch"},
             {"url": "https://mirror.rackspace.com/archlinux/\$repo/os/\$arch"},
             {"url": "https://geo.mirror.pkgbuild.com/\$repo/os/\$arch"}
         ],
