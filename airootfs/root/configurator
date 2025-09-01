@@ -1,5 +1,15 @@
 #!/bin/bash
 
+OMARCHY_LOGO='                 ▄▄▄                                                   
+ ▄█████▄    ▄███████████▄    ▄███████   ▄███████   ▄███████   ▄█   █▄    ▄█   █▄ 
+███   ███  ███   ███   ███  ███   ███  ███   ███  ███   ███  ███   ███  ███   ███
+███   ███  ███   ███   ███  ███   ███  ███   ███  ███   █▀   ███   ███  ███   ███
+███   ███  ███   ███   ███ ▄███▄▄▄███ ▄███▄▄▄██▀  ███       ▄███▄▄▄███▄ ███▄▄▄███
+███   ███  ███   ███   ███ ▀███▀▀▀███ ▀███▀▀▀▀    ███      ▀▀███▀▀▀███  ▀▀▀▀▀▀███
+███   ███  ███   ███   ███  ███   ███ ██████████  ███   █▄   ███   ███  ▄██   ███
+███   ███  ███   ███   ███  ███   ███  ███   ███  ███   ███  ███   ███  ███   ███
+ ▀█████▀    ▀█   ███   █▀   ███   █▀   ███   ███  ███████▀   ███   █▀    ▀█████▀ 
+                                       ███   █▀                                  '
 
 # Install prerequisites
 if ! command -v gum >/dev/null || ! command -v iwctl >/dev/null; then
@@ -21,13 +31,20 @@ working_network() {
   ping -c5 -W1 1.1.1.1 | grep -q "bytes from"
 }
 
+clear_logo() {
+  clear
+  echo -e "$OMARCHY_LOGO\n"
+  echo
+}
 
 step() {
+  clear_logo
   echo "$1"
   echo
 }
 
 notice() {
+  clear_logo
   gum spin --spinner "globe" --title "$1" -- sleep "${2:-2}"
 }
 
@@ -57,6 +74,7 @@ if [[ -z $NETWORK_NOT_NEEDED ]]; then
     elif [[ $wifi_count -eq 1 ]]; then
       wifi_interface="$wifi_interfaces"
     else
+      clear_logo
       wifi_interface=$(echo "$wifi_interfaces" | gum choose --header "Select Wi-Fi interface") || abort
     fi
 
@@ -65,6 +83,7 @@ if [[ -z $NETWORK_NOT_NEEDED ]]; then
     networks=$(echo "$iw_network_scan" | sed -n 's/^[[:space:]]*SSID: //p' | sed '/^$/d' | sort -u)
     if [[ -n $networks ]]; then
       while true; do
+        clear_logo
         ssid="$(echo "$networks" | gum choose --header "Select Wi-Fi network")" || abort
 
         step "Connecting to $ssid..."
@@ -113,12 +132,12 @@ user_form() {
   email_address=$(gum input --placeholder "Used for git authentication (hit return to skip)" --prompt.foreground="#845DF9" --prompt "Email address> ")
 
   while true; do
-    hostname=$(gum input --placeholder "Alphanumeric without spaces (or return for 'iusearchbtw')" --prompt.foreground="#845DF9" --prompt "Hostname> ")
+    hostname=$(gum input --placeholder "Alphanumeric without spaces (or return for 'omarchy')" --prompt.foreground="#845DF9" --prompt "Hostname> ")
 
     if [[ "$hostname" =~ ^[A-Za-z_][A-Za-z0-9_-]*\$?$ ]]; then
       break
     elif [[ -z $hostname ]]; then
-      hostname="iusearchbtw"
+      hostname="omarchy"
       break
     else
       notice "Hostname must be alphanumeric using dashes or underscores but no spaces" 1
@@ -205,6 +224,11 @@ done
 
 clear
 
+# Save user full name and email address, so the autostart can
+# set them as OMARCHY_USER_NAME and OMARCHY_USER_EMAIL
+echo "$full_name" >user_full_name.txt
+echo "$email_address" >user_email_address.txt
+
 disk_size=$(lsblk -bdno SIZE "$disk")
 mib=$((1024 * 1024))
 gib=$((mib * 1024))
@@ -217,6 +241,7 @@ boot_partition_size=$((2 * gib))
 main_partition_start=$((boot_partition_size + boot_partition_start))
 main_partition_size=$((disk_size_in_mib - main_partition_start - gpt_backup_reserve))
 
+password_escaped=$(echo -n "$password" | jq -Rsa)
 password_hash_escaped=$(echo -n "$password_hash" | jq -Rsa)
 username_escaped=$(echo -n "$username" | jq -Rsa)
 
@@ -326,6 +351,9 @@ cat <<-_EOF_ >user_configuration.json
     "mirror_config": {
         "custom_repositories": [],
         "custom_servers": [
+            {"url": "https://mirror.omarchy.org/\$repo/os/\$arch"},
+            {"url": "https://mirror.rackspace.com/archlinux/\$repo/os/\$arch"},
+            {"url": "https://geo.mirror.pkgbuild.com/\$repo/os/\$arch"}
         ],
         "mirror_regions": {},
         "optional_repositories": []
@@ -350,5 +378,11 @@ if [[ $1 == "dry" ]]; then
   echo -e "\n\nUser Credentials:"
   cat user_credentials.json
 
-  rm user_configuration.json user_credentials.json
+  echo -e "\n\nUser Full Name:"
+  cat user_full_name.txt
+
+  echo -e "\nUser Email Address:"
+  cat user_email_address.txt
+
+  rm user_configuration.json user_credentials.json user_full_name.txt user_email_address.txt
 fi
