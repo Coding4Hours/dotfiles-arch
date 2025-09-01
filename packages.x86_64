@@ -126,3 +126,5 @@ xdg-utils
 xfsprogs
 xl2tpd
 zsh
+gum
+wget
