@@ -31,7 +31,7 @@ trap catch_errors ERR
 
 if [[ $(tty) == "/dev/tty1" ]]; then
   # Configurator for user information, disk selection, and wifi configuration
-  ./configurator
+  ./configurator.sh
 
   # Get username from installer config for reliable error recovery
   USER="$(jq -r '.users[0].username' user_credentials.json)"

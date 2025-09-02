@@ -1,15 +1,14 @@
 #!/bin/bash
 
-OMARCHY_LOGO='                 ▄▄▄                                                   
- ▄█████▄    ▄███████████▄    ▄███████   ▄███████   ▄███████   ▄█   █▄    ▄█   █▄ 
-███   ███  ███   ███   ███  ███   ███  ███   ███  ███   ███  ███   ███  ███   ███
-███   ███  ███   ███   ███  ███   ███  ███   ███  ███   █▀   ███   ███  ███   ███
-███   ███  ███   ███   ███ ▄███▄▄▄███ ▄███▄▄▄██▀  ███       ▄███▄▄▄███▄ ███▄▄▄███
-███   ███  ███   ███   ███ ▀███▀▀▀███ ▀███▀▀▀▀    ███      ▀▀███▀▀▀███  ▀▀▀▀▀▀███
-███   ███  ███   ███   ███  ███   ███ ██████████  ███   █▄   ███   ███  ▄██   ███
-███   ███  ███   ███   ███  ███   ███  ███   ███  ███   ███  ███   ███  ███   ███
- ▀█████▀    ▀█   ███   █▀   ███   █▀   ███   ███  ███████▀   ███   █▀    ▀█████▀ 
-                                       ███   █▀                                  '
+CODING4HOURS_LOGO='
+ _____ ___________ _____ _   _ _____   ___  _   _ _____ _   _______  _____ 
+/  __ \  _  |  _  \_   _| \ | |  __ \ /   || | | |  _  | | | | ___ \/  ___|
+| /  \/ | | | | | | | | |  \| | |  \// /| || |_| | | | | | | | |_/ /\ `--. 
+| |   | | | | | | | | | | . ` | | __/ /_| ||  _  | | | | | | |    /  `--. \
+| \__/\ \_/ / |/ / _| |_| |\  | |_\ \___  || | | \ \_/ / |_| | |\ \ /\__/ /
+ \____/\___/|___/  \___/\_| \_/\____/   |_/\_| |_/\___/ \___/\_| \_|\____/ 
+                                                                           
+                                                                            '
 
 # Install prerequisites
 if ! command -v gum >/dev/null || ! command -v iwctl >/dev/null; then
@@ -33,7 +32,7 @@ working_network() {
 
 clear_logo() {
   clear
-  echo -e "$OMARCHY_LOGO\n"
+  echo -e "$CODING4HOURS_LOGO\n"
   echo
 }
 
@@ -128,9 +127,6 @@ user_form() {
   # Hash the password using yescrypt
   password_hash=$(openssl passwd -6 "$password")
 
-  full_name=$(gum input --placeholder "Used for git authentication (hit return to skip)" --prompt.foreground="#845DF9" --prompt "Full name> ")
-  email_address=$(gum input --placeholder "Used for git authentication (hit return to skip)" --prompt.foreground="#845DF9" --prompt "Email address> ")
-
   while true; do
     hostname=$(gum input --placeholder "Alphanumeric without spaces (or return for 'iusearchbtw')" --prompt.foreground="#845DF9" --prompt "Hostname> ")
 
@@ -159,7 +155,6 @@ while true; do
   echo -e "Field,Value
 Username,$username
 Password,$(printf "%${#password}s" | tr ' ' '*')
-Full name,${full_name:-[Skipped]}
 Email address,${email_address:-[Skipped]}
 Hostname,$hostname
 Timezone,$timezone
@@ -223,11 +218,6 @@ while true; do
 done
 
 clear
-
-# Save user full name and email address, so the autostart can
-# set them as OMARCHY_USER_NAME and OMARCHY_USER_EMAIL
-echo "$full_name" >user_full_name.txt
-echo "$email_address" >user_email_address.txt
 
 disk_size=$(lsblk -bdno SIZE "$disk")
 mib=$((1024 * 1024))
@@ -374,11 +364,5 @@ if [[ $1 == "dry" ]]; then
   echo -e "\n\nUser Credentials:"
   cat user_credentials.json
 
-  echo -e "\n\nUser Full Name:"
-  cat user_full_name.txt
-
-  echo -e "\nUser Email Address:"
-  cat user_email_address.txt
-
-  rm user_configuration.json user_credentials.json user_full_name.txt user_email_address.txt
+  rm user_configuration.json user_credentials.json
 fi
