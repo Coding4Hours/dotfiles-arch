@@ -47,10 +47,6 @@ if ! command -v gum >/dev/null || ! command -v iwctl >/dev/null; then
   sudo pacman -Sy --noconfirm --needed gum iw
 fi
 
-if ! command -v tzupdate >/dev/null; then
-  yay -Sy --noconfirm tzupdate
-fi
-
 abort() {
   echo "${1:-Aborted installation}"
   echo -e "\nYou can retry later by running: ./.automated_script.sh"
