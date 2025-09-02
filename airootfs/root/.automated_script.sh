@@ -5,12 +5,8 @@ chroot_bash() {
   HOME=/home/$USER \
     arch-chroot -u $USER /mnt/ \
     env CHROOT_INSTALL=1 \
-    USER_NAME="$(<user_full_name.txt)" \
-    USER_EMAIL="$(<user_email_address.txt)" \
     USER="$USER" \
     HOME="/home/$USER" \
-    REPO="$(<installer_repo.txt)" \
-    REF="$(<installer_ref.txt)" \
     /bin/bash "$@"
 }
 
