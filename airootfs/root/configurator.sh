@@ -15,6 +15,10 @@ if ! command -v gum >/dev/null || ! command -v iwctl >/dev/null; then
   sudo pacman -Sy --noconfirm --needed gum iw
 fi
 
+if ! command -v wget >/dev/null then
+  sudo pacman -Sy --noconfirm --needed wget
+fi
+
 if ! command -v tzupdate >/dev/null; then
   yay -Sy --noconfirm tzupdate
 fi
